@@ -3,4 +3,5 @@
         -Line 1:
         import React, {useEffect} from 'react';
     -because useEffect is not imported by default with React
-2. 
+2. Error on rendering connect button
+    -a return statement must be included in the renderNotConnectedContainer() function.

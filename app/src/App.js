@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+// import ReactDOM, {render} from 'react';
 import './App.css';
 import twitterLogo from './assets/twitter-logo.svg';
 
@@ -8,7 +9,8 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const myTwitter = 'Golden_Sun_Kev';
 
 const App = () => {
-
+  //State declaration
+  const [walletAddress, setWalletAddress] = useState(null);
   //Actions -> declaring function
   const checkIfWalletIsConnected = async () => { 
     try{
@@ -17,14 +19,38 @@ const App = () => {
       if (solana){
         if(solana.isPhantom) {
           console.log(`Phantom wallet found!`);
+          //solana object allows us to connect directly with user wallet
+          const response = await solana.connect({ onlyIfTrusted: true});
+          console.log(`Connected with Public Key:${response.publicKey.toString()}`);
+
+          //set user's publicKey in state to be used later
+          setWalletAddress(response.publicKey.toString());
         }
       } else {
-        alert(`Solana object not found! Get a Phantom Wallet`);
+        alert(`Solana object not found! Get a Phantom Wallet 👻`);
       }
     } catch (error){
       console.error(error)
     }
   };
+
+  const connectWallet = async () => {
+    const {solana} = window;
+    if(solana){
+      const response = await solana.connect();
+      console.log('Connected with Public Key:', response.publicKey.toString());
+      setWalletAddress(response.publicKey.toString())
+    }
+  };
+
+  const renderNotConnectedContainer = () =>{
+    return(<button
+      className="cta-button connect-wallet-button"
+      onClick={connectWallet}
+      >
+        Connect to Wallet
+      </button>)
+  }
 
   //Check to see if wallet is connected when component first mounts
   useEffect(()=>{ //React calls this once on component mount as long as the [] is empty.
@@ -41,6 +67,8 @@ const App = () => {
         <div className="header-container">
           <p className="header">🍭 Candy Drop</p>
           <p className="sub-text">NFT drop machine with fair mint</p>
+          {/*Render */}
+          {!walletAddress && renderNotConnectedContainer()}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
