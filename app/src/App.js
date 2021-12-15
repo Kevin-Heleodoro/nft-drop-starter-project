@@ -1,12 +1,40 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import twitterLogo from './assets/twitter-logo.svg';
 
 // Constants
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+const myTwitter = 'Golden_Sun_Kev';
 
 const App = () => {
+
+  //Actions -> declaring function
+  const checkIfWalletIsConnected = async () => { 
+    try{
+      const { solana } = window;
+      //checks the window object in the DOM to see if the solana object has been injected by Phantom Wallet
+      if (solana){
+        if(solana.isPhantom) {
+          console.log(`Phantom wallet found!`);
+        }
+      } else {
+        alert(`Solana object not found! Get a Phantom Wallet`);
+      }
+    } catch (error){
+      console.error(error)
+    }
+  };
+
+  //Check to see if wallet is connected when component first mounts
+  useEffect(()=>{ //React calls this once on component mount as long as the [] is empty.
+    const onLoad = async () =>{
+      await checkIfWalletIsConnected();
+    };
+    window.addEventListener('load', onLoad);
+    return ()=> window.removeEventListener('load', onLoad);
+  }, []);
+
   return (
     <div className="App">
       <div className="container">
@@ -21,7 +49,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >{`built on @${TWITTER_HANDLE}, by @${myTwitter}`}</a>
         </div>
       </div>
     </div>

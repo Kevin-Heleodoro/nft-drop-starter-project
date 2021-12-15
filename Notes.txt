@@ -1,0 +1,6 @@
+1. Error on importing React modules
+    -App.js
+        -Line 1:
+        import React, {useEffect} from 'react';
+    -because useEffect is not imported by default with React
+2. 

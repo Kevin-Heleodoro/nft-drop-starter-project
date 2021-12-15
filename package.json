@@ -1,0 +1,20 @@
+{
+  "name": "nft-drop-starter-project",
+  "version": "1.0.0",
+  "description": "To get started with this course, clone this repo and follow these commands:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kevin-Heleodoro/nft-drop-starter-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kevin-Heleodoro/nft-drop-starter-project/issues"
+  },
+  "homepage": "https://github.com/Kevin-Heleodoro/nft-drop-starter-project#readme"
+}
