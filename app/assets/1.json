@@ -1,0 +1,29 @@
+{
+    "name": "Kiwi",
+    "symbol": "",
+    "description": "A trio of my pets.",
+    "image": "1.png",
+    "attributes": [
+        {
+            "trait_type": "Good Dog",
+            "value": "yes"
+        }
+    ],
+    "collection":{
+        "name": "Heleo's Fur Friends"
+    },
+    "properties": {
+      "files": [
+        {
+          "uri": "1.png",
+          "type": "image/png"
+        }
+      ],
+      "creators": [
+        {
+          "address": "INSERT_CREATOR_WALLET_ADDRESS_HERE",
+          "share": 100
+        }
+      ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "name": "Blueberry",
+    "symbol": "",
+    "description": "A trio of my pets.",
+    "image": "2.png",
+    "attributes": [
+        {
+            "trait_type": "Satan Reincarnated",
+            "value": "yes"
+        }
+    ],
+    "collection":{
+        "name": "Heleo's Fur Friends"
+    },
+    "properties": {
+      "files": [
+        {
+          "uri": "2.png",
+          "type": "image/png"
+        }
+      ],
+      "creators": [
+        {
+          "address": "INSERT_CREATOR_WALLET_ADDRESS_HERE",
+          "share": 100
+        }
+      ]
+    }
+}
