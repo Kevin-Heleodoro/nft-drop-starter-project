@@ -1,7 +1,27 @@
+## Things to Remember:
+- Metaplex CLI installed in home folder `cd ~` {https://docs.metaplex.com/create-candy/introduction}
+- Solana v1.9.1 installed globally {https://docs.solana.com/cli/conventions}
+- `npm run start` to launch server
+- ts-node installed locally
+
+
+
+## Error Log:
 1. Error on importing React modules
     -App.js
         -Line 1:
         import React, {useEffect} from 'react';
     -because useEffect is not imported by default with React
 2. Error on rendering connect button
-    -a return statement must be included in the renderNotConnectedContainer() function.
+    -App.js
+        -Line 46
+          const renderNotConnectedContainer = () =>{
+            ->  return(<button
+                className="cta-button connect-wallet-button"
+                onClick={connectWallet}
+                >
+                    Connect to Wallet
+                </button>)
+            }
+     -a return statement must be included in the renderNotConnectedContainer() function.
+3. 

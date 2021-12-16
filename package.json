@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Kevin-Heleodoro/nft-drop-starter-project/issues"
   },
-  "homepage": "https://github.com/Kevin-Heleodoro/nft-drop-starter-project#readme"
+  "homepage": "https://github.com/Kevin-Heleodoro/nft-drop-starter-project#readme",
+  "devDependencies": {
+    "ts-node": "^10.4.0"
+  }
 }
