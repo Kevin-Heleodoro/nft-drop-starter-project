@@ -4,7 +4,10 @@
 - `npm run start` to launch server
 - ts-node installed locally
 - 1. Upload NFTs to Arweave
+    -ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts upload ./assets --env devnet --keypair ~/.config/solana/devnet.json
+    -ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts verify --keypair ~/.config/solana/devnet.json 
 - 2. Create candy machine on Metaplex
+    -
 - 3. Update candy machine with proper drop date
 
 
