@@ -3,12 +3,20 @@
 - Solana v1.9.1 installed globally {https://docs.solana.com/cli/conventions}
 - `npm run start` to launch server
 - ts-node installed locally
-- 1. Upload NFTs to Arweave
+
+- 1. Upload NFTs to Arweave *** MAKE SURE COMMANDS ARE BEING RUN FROM ONE LEVEL ABOVE ASSETS FOLDER ***
     -ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts upload ./assets --env devnet --keypair ~/.config/solana/devnet.json
     -ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts verify --keypair ~/.config/solana/devnet.json 
-- 2. Create candy machine on Metaplex
-    -
+
+- 2. Create candy machine on Metaplex *** MAKE SURE COMMANDS ARE BEING RUN FROM ONE LEVEL ABOVE ASSETS FOLDER ***
+    -ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts create_candy_machine --env devnet --keypair ~/.config/solana/devnet.json -p 1
+          candy machine pubkey: CdgS5QD6zfArgHYkpmrgWAd86ykrm1bvXU4Kx6KNHDXy
+    - 
+
 - 3. Update candy machine with proper drop date
+    - ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts update_candy_machine --date "29 Dec 2021 00:12:00 GMT" --env devnet --keypair ~/.config/solana/devnet.json
+
+- 4. .env created using values found in ./app/.cache/devnet-temp.json
 
 
 
@@ -34,3 +42,5 @@
     - Narrowed it down to the hang up (error 8) being caused by 0.png (Clem).
     - Added file directly to online repo and called a git pull at the local level.
     - Not sure what the reason behind this error was -> will dig more into it tomorrow.
+4. .toNumber() did not work in ./app/src/CandyMachine/index.js on line 285
+    - used parseInt() to resolve issue.
