@@ -28,6 +28,8 @@ const CandyMachine = ({ walletAddress }) => {
   // State
   const [machineStats, setMachineStats] = useState(null);
   const [mints, setMints] = useState([]);
+  const [isMinting, setIsMinting] = useState(false);
+  const [isLoadingMints, setIsLoadingMints] = useState(false);
 
   // Actions
   const getProvider = () => {
@@ -59,24 +61,19 @@ const CandyMachine = ({ walletAddress }) => {
     const candyMachine = await program.account.candyMachine.fetch(process.env.REACT_APP_CANDY_MACHINE_ID);
 
     //Parse out all metadata and log it out
-    // const itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
-    // const itemsRedeemed = candyMachine.itemsRedemeed.toNumber();
-    // const goLiveData = candyMachine.data.goLiveData.toNumber();
-    // const itemsRemaining = itemsAvailable - itemsRedeemed;
-
     const itemsAvailable = candyMachine.data.itemsAvailable;
-    const itemsRedeemed = candyMachine.itemsRedemeed;
-    const goLiveData = candyMachine.data.goLiveData;
+    const itemsRedeemed = candyMachine.itemsRedeemed;
+    const goLiveDate = candyMachine.data.goLiveDate;
     const itemsRemaining = itemsAvailable - itemsRedeemed;
 
     //used later in UI
-    const goLiveDateTimeString = `${new Date(goLiveData * 1000).toLocaleDateString()} @ ${new Date(goLiveData * 1000).toLocaleTimeString}`;
+    const goLiveDateTimeString = `${new Date(goLiveDate * 1000).toLocaleDateString()} @ ${new Date(goLiveDate * 1000).toLocaleTimeString()}`;
 
     setMachineStats({
       itemsAvailable,
       itemsRedeemed,
       itemsRemaining,
-      goLiveData,
+      goLiveDate,
       goLiveDateTimeString,
     });
 
@@ -85,9 +82,11 @@ const CandyMachine = ({ walletAddress }) => {
       itemsAvailable,
       itemsRedeemed,
       itemsRemaining,
-      goLiveData,
+      goLiveDate,
       goLiveDateTimeString,
     });
+
+    setIsLoadingMints(true);
 
     const data = await fetchHashTable(
       process.env.REACT_APP_CANDY_MACHINE_ID,
@@ -120,6 +119,8 @@ const CandyMachine = ({ walletAddress }) => {
       //Store image URIs
       setMints(filteredMints)
     }
+
+    setIsLoadingMints(false);
   };
 
   const renderMintedItems = () => (
@@ -224,6 +225,7 @@ const CandyMachine = ({ walletAddress }) => {
 
   const mintToken = async () => {
     try {
+      setIsMinting(true);
       const mint = web3.Keypair.generate();
       const token = await getTokenWallet(
         walletAddress.publicKey,
@@ -304,18 +306,24 @@ const CandyMachine = ({ walletAddress }) => {
         txn,
         async (notification, context) => {
           if (notification.type === 'status') {
-            console.log('Receievd status event');
+            console.log('Received status event');
 
             const { result } = notification;
             if (!result.err) {
               console.log('NFT Minted!');
+
+              setIsMinting(false);
+              await getCandyMachineState();
             }
           }
         },
         { commitment: 'processed' }
       );
+
     } catch (error) {
       let message = error.msg || 'Minting failed! Please try again!';
+
+      setIsMinting(false);
 
       if (!error.msg) {
         if (error.message.indexOf('0x138')) {
@@ -367,17 +375,15 @@ const CandyMachine = ({ walletAddress }) => {
   };
 
 
-
-  
-
   return (
     machineStats && (
     <div className="machine-container">
       <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>
       <p>{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}</p>
-      <button className="cta-button mint-button" onClick={mintToken}>
+      <button className="cta-button mint-button" onClick={mintToken} disabled={isMinting}>
         Mint NFT
       </button>
+      {isLoadingMints && <p>LOADING MINTS....</p>}
       {/* If we have mints available in array, render items */}
       {mints.length > 0 && renderMintedItems()}
     </div>

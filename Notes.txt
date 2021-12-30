@@ -50,4 +50,4 @@
 
 4. .toNumber() did not work in ./app/src/CandyMachine/index.js on line 285
     - used parseInt() to resolve issue. -> *** This was still not giving me the values I was looking for. Will come back to fix this eventually.
-    
+        - ..... I was spelling shit wrong. Did not need .toNumber() at all.
