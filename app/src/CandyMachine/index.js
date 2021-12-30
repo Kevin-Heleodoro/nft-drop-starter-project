@@ -27,6 +27,8 @@ const MAX_CREATOR_LEN = 32 + 1 + 1;
 const CandyMachine = ({ walletAddress }) => {
   // State
   const [machineStats, setMachineStats] = useState(null);
+  const [mints, setMints] = useState([]);
+
   // Actions
   const getProvider = () => {
     const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
@@ -86,7 +88,52 @@ const CandyMachine = ({ walletAddress }) => {
       goLiveData,
       goLiveDateTimeString,
     });
+
+    const data = await fetchHashTable(
+      process.env.REACT_APP_CANDY_MACHINE_ID,
+      true
+    );
+
+    if (data.length !== 0) {
+      const requests = data.map(async (mint) => {
+        //Get URI
+        try {
+          const response = await fetch(mint.data.uri);
+          const parse = await response.json();
+          console.log(`Previously Minted NFTs ${mint}`);
+          
+          //Get Image URI
+          return parse.image;
+        } catch (e) {
+          //If request fails, disregard and charlie mike
+          console.error(`Failed at retrieving Minted NFTS ${mint}`);
+          return null
+        }
+      });
+
+      //Wait for requests to finish
+      const allMints = await Promise.all(requests);
+
+      //Filter requests that failed
+      const filteredMints = allMints.filter(mint => mint != null);
+
+      //Store image URIs
+      setMints(filteredMints)
+    }
   };
+
+  const renderMintedItems = () => (
+    <div className='gif-container'>
+      <p className='sub-text'>Minted Items</p>
+      <div className='gif-grid'>
+        {mints.map((mint)=>(
+          <div className='gif-item' key={mint}>
+            <img src={mint} alt={`Minted NFT ${mint}`}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   useEffect(() => {
     getCandyMachineState();
@@ -208,7 +255,7 @@ const CandyMachine = ({ walletAddress }) => {
       };
 
       const signers = [mint];
-      
+
       const instructions = [
         web3.SystemProgram.createAccount({
           fromPubkey: walletAddress.publicKey,
@@ -331,6 +378,8 @@ const CandyMachine = ({ walletAddress }) => {
       <button className="cta-button mint-button" onClick={mintToken}>
         Mint NFT
       </button>
+      {/* If we have mints available in array, render items */}
+      {mints.length > 0 && renderMintedItems()}
     </div>
     )
   );
