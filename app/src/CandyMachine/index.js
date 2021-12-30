@@ -25,9 +25,75 @@ const MAX_SYMBOL_LENGTH = 10;
 const MAX_CREATOR_LEN = 32 + 1 + 1;
 
 const CandyMachine = ({ walletAddress }) => {
-  //Add state properties
+  // State
   const [machineStats, setMachineStats] = useState(null);
   // Actions
+  const getProvider = () => {
+    const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
+    
+    //Create new connection object
+    const connection = new Connection(rpcHost);
+
+    //Create new Solana provider object
+    const provider = new Provider(
+      connection,
+      window.solana,
+      opts.preflightCommitment
+    );
+
+    return provider;
+  }
+
+  const getCandyMachineState = async () => {
+    const provider = getProvider();
+
+    //get metadata about deployed candy machine
+    const idl = await Program.fetchIdl(candyMachineProgram, provider);
+
+    //create program to call
+    const program = new Program(idl, candyMachineProgram, provider);
+
+    //fetch metadata from candy machine
+    const candyMachine = await program.account.candyMachine.fetch(process.env.REACT_APP_CANDY_MACHINE_ID);
+
+    //Parse out all metadata and log it out
+    // const itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
+    // const itemsRedeemed = candyMachine.itemsRedemeed.toNumber();
+    // const goLiveData = candyMachine.data.goLiveData.toNumber();
+    // const itemsRemaining = itemsAvailable - itemsRedeemed;
+
+    const itemsAvailable = candyMachine.data.itemsAvailable;
+    const itemsRedeemed = candyMachine.itemsRedemeed;
+    const goLiveData = candyMachine.data.goLiveData;
+    const itemsRemaining = itemsAvailable - itemsRedeemed;
+
+    //used later in UI
+    const goLiveDateTimeString = `${new Date(goLiveData * 1000).toLocaleDateString()} @ ${new Date(goLiveData * 1000).toLocaleTimeString}`;
+
+    setMachineStats({
+      itemsAvailable,
+      itemsRedeemed,
+      itemsRemaining,
+      goLiveData,
+      goLiveDateTimeString,
+    });
+
+    console.log({
+      candyMachine,
+      itemsAvailable,
+      itemsRedeemed,
+      itemsRemaining,
+      goLiveData,
+      goLiveDateTimeString,
+    });
+  };
+
+  useEffect(() => {
+    getCandyMachineState();
+  }, []);
+
+  
+
   const fetchHashTable = async (hash, metadataEnabled) => {
     const connection = new web3.Connection(
       process.env.REACT_APP_SOLANA_RPC_HOST
@@ -142,6 +208,7 @@ const CandyMachine = ({ walletAddress }) => {
       };
 
       const signers = [mint];
+      
       const instructions = [
         web3.SystemProgram.createAccount({
           fromPubkey: walletAddress.publicKey,
@@ -252,75 +319,9 @@ const CandyMachine = ({ walletAddress }) => {
     });
   };
 
-  useEffect(() => {
-    getCandyMachineState();
-  });
 
-  const getProvider = () => {
-    const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
-    
-    //Create new connection object
-    const connection = new Connection(rpcHost);
 
-    //Create new Solana provider object
-    const provider = new Provider(
-      connection,
-      window.solana,
-      opts.preflightCommitment
-    );
-
-    return provider;
-  }
-
-  const getCandyMachineState = async () => {
-    const provider = getProvider();
-
-    //get metadata about deployed candy machine
-    const idl = await Program.fetchIdl(candyMachineProgram, provider);
-
-    //create program to call
-    const program = new Program(idl, candyMachineProgram, provider);
-
-    //fetch metadata from candy machine
-    const candyMachine = await program.account.candyMachine.fetch(process.env.REACT_APP_CANDY_MACHINE_ID);
-
-    //Parse out all metadata and log it out
-    // const itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
-    // const itemsRedeemed = candyMachine.itemsRedemeed.toNumber();
-    // const goLiveData = candyMachine.data.goLiveData.toNumber();
-
-    // const itemsAvailable = candyMachine.data.itemsAvailable;
-    // const itemsRedeemed = candyMachine.itemsRedemeed;
-    // const goLiveData = candyMachine.data.goLiveData;
-    
-    
-    const itemsAvailable = parseInt(candyMachine.data.itemsAvailable);
-    const itemsRedeemed = candyMachine.itemsRedemeed
-    // const goLiveData = parseInt(candyMachine.data.goLiveData);
-
-    const candyData = candyMachine.itemsRedeemed.words[0]
-    
-    const itemsRemaining = itemsAvailable - itemsRedeemed;
-    //used later in UI
-    // const goLiveDateTimeString = `${new Date(goLiveData * 1000).toLocaleDateString()} @ ${new Date(goLiveData * 1000).toLocaleTimeString}`;
-
-    // setMachineStats({
-    //   // itemsAvailable,
-    //   // itemsRedeemed,
-    //   // itemsRemaining,
-    //   // goLiveData,
-    //   // goLiveDateTimeString,
-    // });
-
-    console.log({
-      candyData,
-      itemsAvailable,
-      itemsRedeemed,
-      itemsRemaining,
-      // goLiveData,
-      // goLiveDateTimeString,
-    });
-  };
+  
 
   return (
     machineStats && (

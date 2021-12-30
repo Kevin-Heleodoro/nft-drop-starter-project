@@ -18,6 +18,9 @@
 
 - 4. .env created using values found in ./app/.cache/devnet-temp.json
 
+-5. CandyMachine index.js file updated to collect and display metadata 
+    - Still having issues with the .toNumber() that it wants me to run on the values being pulled from CandyMachine
+
 
 
 ## Error Log:
@@ -26,6 +29,7 @@
         -Line 1:
         import React, {useEffect} from 'react';
     -because useEffect is not imported by default with React
+
 2. Error on rendering connect button
     -App.js
         -Line 46
@@ -38,9 +42,12 @@
                 </button>)
             }
      -a return statement must be included in the renderNotConnectedContainer() function.
+
 3. Encountered error when I tried to push assets to online repo
     - Narrowed it down to the hang up (error 8) being caused by 0.png (Clem).
     - Added file directly to online repo and called a git pull at the local level.
     - Not sure what the reason behind this error was -> will dig more into it tomorrow.
+
 4. .toNumber() did not work in ./app/src/CandyMachine/index.js on line 285
-    - used parseInt() to resolve issue.
+    - used parseInt() to resolve issue. -> *** This was still not giving me the values I was looking for. Will come back to fix this eventually.
+    
