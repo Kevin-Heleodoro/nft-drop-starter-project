@@ -14,7 +14,7 @@
     - 
 
 - 3. Update candy machine with proper drop date
-    - ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts update_candy_machine --date "29 Dec 2021 00:12:00 GMT" --env devnet --keypair ~/.config/solana/devnet.json
+    - ts-node ~/metaplex-foundation/metaplex/js/packages/cli/src/candy-machine-cli.ts update_candy_machine --date "1 Jan 2022 00:12:00 GMT" --env devnet --keypair ~/.config/solana/devnet.json
 
 - 4. .env created using values found in ./app/.cache/devnet-temp.json
 

@@ -66,8 +66,8 @@ const App = () => {
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header">🍭 Candy Drop</p>
-          <p className="sub-text">NFT drop machine with fair mint</p>
+          <p className="header">🐕 Fur Friends Drop 🐈 </p>
+          <p className="sub-text">NFT drop machine with "fair" mint</p>
           {/*Render */}
           {!walletAddress && renderNotConnectedContainer()}
         </div>

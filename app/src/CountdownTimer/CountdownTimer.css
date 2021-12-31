@@ -1,8 +1,16 @@
+.timer-container {
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: cornflowerblue;
+}
+
 .timer-container .timer-header {
-  font-size: 20px;
+  font-size: 50px;
   font-weight: bold;
+  color: blue;
 }
 
 .timer-container .timer-value {
-  font-size: 18px;
+  font-size: 45px;
+  color: lightblue;
 }
