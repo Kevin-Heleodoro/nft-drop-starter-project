@@ -7,6 +7,9 @@ pubkey: FgthdFC89YuQ6o4xUwZXuw2zioH2JD7kFc4GJi8bbrK
 /.pnp
 .pnp.js
 .env
+.cache
+/.cache/
+/.cache/devnet-temp
 
 # testing
 /coverage
